@@ -46,7 +46,7 @@ class GradCam(CoreSaliency):
               call_model_function,
               call_model_args=None,
               should_resize=True,
-              three_dims=True):
+              three_dims=1):                                         # ETF change : 'True' in '1'
     """Returns a Grad-CAM mask.
 
     Modified from
@@ -102,9 +102,9 @@ class GradCam(CoreSaliency):
         grad_cam = grad_cam / np.max(grad_cam)
       grad_cam = resize(grad_cam, x_value.shape[:2])
 
-    # convert grayscale to 3-D
-    if three_dims:
+    # convert grayscale to 3-D                                       # ETF change : '3-D' to 'n-D'
+    if three_dims>1:                                                 # ETF change : 'if three_dims:' to 'if three_dims>1:'
       grad_cam = np.expand_dims(grad_cam, axis=2)
-      grad_cam = np.tile(grad_cam, [1, 1, 3])
+      grad_cam = np.tile(grad_cam, [1, 1, three_dims])               # ETF change : '3' to 'three_dims'
 
     return grad_cam

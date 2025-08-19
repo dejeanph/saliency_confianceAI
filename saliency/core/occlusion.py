@@ -45,7 +45,8 @@ class Occlusion(CoreSaliency):
               call_model_function,
               call_model_args=None,
               size=15,
-              value=0):
+              value=0, 
+              stride=1):                                             # ETF add 'stride=1" parameter
     """Returns an occlusion mask.
 
     Args:
@@ -80,8 +81,8 @@ class Occlusion(CoreSaliency):
     occlusion_scores = np.zeros_like(x_value)
 
     original_y_value = self.getY(x_value, call_model_function, call_model_args)
-    for row in range(1 + x_value.shape[0] - size):
-      for col in range(1 + x_value.shape[1] - size):
+    for row in range(0, 1 + x_value.shape[0] - size, stride):        # ETF change 'range(x)' in 'range(O,x,stride)'
+      for col in range(0, 1 + x_value.shape[1] - size, stride):      # ETF change 'range(x)' in 'range(O,x,stride)'
         x_occluded = np.array(x_value)
         if len(x_value.shape) > 2:
           x_occluded[row:row+size, col:col+size, :] = occlusion_window
